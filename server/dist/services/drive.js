@@ -7,6 +7,7 @@ const auth_1 = require("./auth");
  * Get list of text files from Google Drive
  */
 const getTextFilesFromDrive = async (tokens) => {
+    // create an authenticated client using tokens.
     const auth = (0, auth_1.createAuthenticatedClient)(tokens);
     const drive = googleapis_1.google.drive({ version: "v3", auth });
     // Query for .txt and .md files

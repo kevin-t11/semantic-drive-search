@@ -8,6 +8,7 @@ import { TokenInfo } from "../types/auth";
 export const getTextFilesFromDrive = async (
   tokens: TokenInfo
 ): Promise<DriveFile[]> => {
+  // create an authenticated client using tokens.
   const auth = createAuthenticatedClient(tokens);
   const drive = google.drive({ version: "v3", auth });
 

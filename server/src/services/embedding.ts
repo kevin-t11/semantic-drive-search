@@ -49,6 +49,6 @@ export const generateFileEmbeddings = async (
       console.error(`Error generating embedding for ${file.name}:`, error);
     }
   }
-
+  // FileVector object that contains the file metadata and its embedding.
   return fileVectors;
 };

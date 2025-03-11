@@ -4,6 +4,7 @@ exports.getFileContent = exports.getTextFiles = void 0;
 const drive_1 = require("../services/drive");
 const asyncHandler_1 = require("../utils/asyncHandler");
 exports.getTextFiles = (0, asyncHandler_1.asyncHandler)(async (req, res) => {
+    // The req.tokens! syntax asserts that the tokens are present (set by the authentication middleware).
     const files = await (0, drive_1.getTextFilesFromDrive)(req.tokens);
     res.json({
         status: "success",

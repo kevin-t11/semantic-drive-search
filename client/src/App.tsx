@@ -1,60 +1,61 @@
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
+import { ThemeProvider } from "next-themes"
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
+import { useState, useEffect } from "react"
+import LoginPage from "@/pages/Login"
+import IngestPage from "@/pages/Ingest"
+import SearchPage from "@/pages/Search"
+import { Toaster } from "@/components/ui/toaster"
+import { useToast } from "@/hooks/use-toast"
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+  const { toast } = useToast()
 
-  const handleGoogleLogin = async () => {
-    // TODO: Implement Google OAuth login
-    window.location.href = 'http://localhost:3000/api/auth/google'
+  useEffect(() => {
+    // Check if user is already authenticated
+    const token = localStorage.getItem("google_access_token")
+    if (token) {
+      setIsAuthenticated(true)
+    }
+  }, [])
+
+  const handleAuthSuccess = () => {
+    setIsAuthenticated(true)
+    toast({
+      title: "Authentication successful",
+      description: "You are now logged in with Google",
+    })
   }
 
-  const handleFileSearch = async () => {
-    // TODO: Implement semantic search
+  const handleLogout = () => {
+    localStorage.removeItem("google_access_token")
+    setIsAuthenticated(false)
+    toast({
+      title: "Logged out",
+      description: "You have been logged out successfully",
+    })
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
-      <div className="max-w-2xl w-full space-y-8">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">Google Drive Semantic Search</h1>
-          <p className="text-lg text-muted-foreground mb-8">
-            Search your Drive files using natural language
-          </p>
-        </div>
-
-        {!isLoggedIn ? (
-          <div className="flex justify-center">
-            <Button onClick={handleGoogleLogin} size="lg">
-              Login with Google
-            </Button>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <div className="flex gap-4">
-              <Button variant="outline">
-                Fetch Drive Files
-              </Button>
-              <Button>
-                Generate Embeddings
-              </Button>
-            </div>
-
-            <div className="flex gap-4">
-              <input
-                type="text"
-                placeholder="Search your files..."
-                className="flex-1 px-4 py-2 border rounded-md"
-              />
-              <Button onClick={handleFileSearch}>
-                Search
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={isAuthenticated ? <Navigate to="/ingest" /> : <LoginPage onAuthSuccess={handleAuthSuccess} />}
+          />
+          <Route
+            path="/ingest"
+            element={isAuthenticated ? <IngestPage onLogout={handleLogout} /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/search"
+            element={isAuthenticated ? <SearchPage onLogout={handleLogout} /> : <Navigate to="/" />}
+          />
+        </Routes>
+      </Router>
+      <Toaster />
+    </ThemeProvider>
   )
 }
 
-export default App
