@@ -1,7 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createAuthenticatedClient = exports.verifyAndRefreshToken = exports.getTokensFromCode = exports.generateAuthUrl = void 0;
 const google_auth_library_1 = require("google-auth-library");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 // Initialize OAuth client with credentials and redirect URI
 const client = new google_auth_library_1.OAuth2Client(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI);
 // In-memory token storage (replace with a database in production)

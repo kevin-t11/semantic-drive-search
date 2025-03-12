@@ -1,5 +1,8 @@
 import { OAuth2Client } from "google-auth-library";
 import { TokenInfo } from "../types/auth";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // Initialize OAuth client with credentials and redirect URI
 const client = new OAuth2Client(

@@ -14,7 +14,7 @@ const router = express_1.default.Router();
 exports.router = router;
 // Auth routes
 router.get("/auth/url", auth_1.getAuthUrl);
-router.get("/auth/callback", auth_1.handleAuthCallback);
+router.get("/auth/google/callback", auth_1.handleAuthCallback);
 router.post("/auth/refresh", auth_1.refreshToken);
 // Drive routes (protected by auth)
 router.get("/files", auth_2.authMiddleware, drive_1.getTextFiles);

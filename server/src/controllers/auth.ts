@@ -14,7 +14,6 @@ export const getAuthUrl = asyncHandler(async (req: Request, res: Response) => {
     data: { url },
   });
 });
-
 export const handleAuthCallback = asyncHandler(
   async (req: Request, res: Response) => {
     const { code } = req.query;
@@ -28,10 +27,8 @@ export const handleAuthCallback = asyncHandler(
 
     const tokens = await getTokensFromCode(code);
 
-    res.json({
-      status: "success",
-      data: { tokens },
-    });
+    const frontendUrl = `http://localhost:5173/google/callback?token=${tokens.access_token}`;
+    res.redirect(frontendUrl);
   }
 );
 

@@ -13,7 +13,7 @@ const router = express.Router();
 
 // Auth routes
 router.get("/auth/url", getAuthUrl);
-router.get("/auth/callback", handleAuthCallback);
+router.get("/auth/google/callback", handleAuthCallback);
 router.post("/auth/refresh", refreshToken);
 
 // Drive routes (protected by auth)

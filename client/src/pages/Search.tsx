@@ -21,6 +21,8 @@ interface SearchResult {
   score: number
 }
 
+const BACKEDND_URI = import.meta.env.VITE_BACKEND_URI;
+
 export default function SearchPage({ onLogout }: SearchPageProps) {
   const [query, setQuery] = useState("")
   const [results, setResults] = useState<SearchResult[]>([])
@@ -42,7 +44,7 @@ export default function SearchPage({ onLogout }: SearchPageProps) {
     setIsSearching(true)
 
     try {
-      const response = await fetch("/api/search", {
+      const response = await fetch(`${BACKEDND_URI}/search`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

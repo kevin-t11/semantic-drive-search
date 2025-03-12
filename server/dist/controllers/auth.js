@@ -19,10 +19,8 @@ exports.handleAuthCallback = (0, asyncHandler_1.asyncHandler)(async (req, res) =
         });
     }
     const tokens = await (0, auth_1.getTokensFromCode)(code);
-    res.json({
-        status: "success",
-        data: { tokens },
-    });
+    const frontendUrl = `http://localhost:5173/google/callback?token=${tokens.access_token}`;
+    res.redirect(frontendUrl);
 });
 exports.refreshToken = (0, asyncHandler_1.asyncHandler)(async (req, res) => {
     const { token } = req.body;

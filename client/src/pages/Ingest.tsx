@@ -19,6 +19,8 @@ interface DriveFile {
   webViewLink: string
 }
 
+const BACKEDND_URI = import.meta.env.VITE_BACKEND_URI;
+
 export default function IngestPage({ onLogout }: IngestPageProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [files, setFiles] = useState<DriveFile[]>([])
@@ -64,7 +66,6 @@ export default function IngestPage({ onLogout }: IngestPageProps) {
     } catch (error) {
       console.error("Error fetching files:", error)
       toast({
-        variant: "destructive",
         title: "Error fetching files",
         description: error instanceof Error ? error.message : "An unknown error occurred",
       })
@@ -97,10 +98,11 @@ export default function IngestPage({ onLogout }: IngestPageProps) {
         const content = await contentResponse.text()
 
         // Send to backend for processing
-        const ingestResponse = await fetch("/api/ingest", {
+        const ingestResponse = await fetch(`${BACKEDND_URI}/ingest`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`
           },
           body: JSON.stringify({
             fileId: file.id,

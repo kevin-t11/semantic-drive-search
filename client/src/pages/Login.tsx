@@ -21,11 +21,12 @@ export default function LoginPage({ onAuthSuccess }: LoginPageProps) {
       // Google OAuth client ID from environment variables
       const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
 
+
       // Define the OAuth scope for Drive access (read-only)
       const scope = "https://www.googleapis.com/auth/drive.readonly"
 
       // Redirect URI from environment variables (must exactly match one of the authorized URIs in Google Cloud Console)
-      const redirectUri = import.meta.env.VITE_REDIRECT_URI || window.location.origin
+      const redirectUri = import.meta.env.VITE_REDIRECT_URL
 
       // Generate a random state value for security
       const state = Math.random().toString(36).substring(2)
@@ -66,7 +67,7 @@ export default function LoginPage({ onAuthSuccess }: LoginPageProps) {
       localStorage.removeItem("oauth_state")
       // Pass the authorization code to the parent component
       // (Your backend should exchange this code for tokens)
-      onAuthSuccess(code)
+      onAuthSuccess(code);
     }
   }
 

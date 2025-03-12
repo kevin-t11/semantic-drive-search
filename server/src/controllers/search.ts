@@ -14,7 +14,6 @@ import { SearchQuery } from "../types/search";
 export const ingestFiles = asyncHandler(async (req: Request, res: Response) => {
   // 1. Get text files from Drive
   const files = await getTextFilesFromDrive(req.tokens!);
-
   if (files.length === 0) {
     return res.json({
       status: "success",
