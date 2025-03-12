@@ -130,7 +130,7 @@ export default function IngestPage({ onLogout }: IngestPageProps) {
     } catch (error) {
       console.error("Error processing files:", error)
       toast({
-        variant: "destructive",
+        variant: "default",
         title: "Error processing files",
         description: error instanceof Error ? error.message : "An unknown error occurred",
       })

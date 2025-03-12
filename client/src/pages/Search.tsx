@@ -68,7 +68,7 @@ export default function SearchPage({ onLogout }: SearchPageProps) {
     } catch (error) {
       console.error("Search error:", error)
       toast({
-        variant: "destructive",
+        variant: "default",
         title: "Search failed",
         description: error instanceof Error ? error.message : "An unknown error occurred",
       })
