@@ -29,6 +29,8 @@ export default function SearchPage({ onLogout }: SearchPageProps) {
   const [isSearching, setIsSearching] = useState(false)
   const { toast } = useToast()
 
+  const accessToken = localStorage.getItem("google_access_token")
+
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -48,9 +50,12 @@ export default function SearchPage({ onLogout }: SearchPageProps) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`
         },
         body: JSON.stringify({ query }),
       })
+
+      console.log(response);
 
       if (!response.ok) {
         throw new Error("Search failed")

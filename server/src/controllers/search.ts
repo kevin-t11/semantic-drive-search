@@ -45,7 +45,7 @@ export const ingestFiles = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const searchQuery = asyncHandler(async (req: Request, res: Response) => {
-  const { query, limit = 5 }: SearchQuery = req.body;
+  const { query, limit = 10 }: SearchQuery = req.body;
 
   if (!query) {
     return res.status(400).json({
@@ -54,14 +54,25 @@ export const searchQuery = asyncHandler(async (req: Request, res: Response) => {
     });
   }
 
-  // 1. Generate embedding for query
-  const queryEmbedding = await generateEmbedding(query);
+  try {
+    // Generate embedding for the query using the free model
+    const queryEmbedding = await generateEmbedding(query);
+    console.log("Query Embedding:", queryEmbedding);
 
-  // 2. Search in Pinecone
-  const results = await searchVectors(queryEmbedding, limit);
+    // Search for similar vectors in Pinecone
+    const results = await searchVectors(queryEmbedding, limit);
+    console.log("Search Results:", results);
 
-  res.json({
-    status: "success",
-    data: { results },
-  });
+    res.json({
+      status: "success",
+      data: { results },
+    });
+  } catch (error: any) {
+    console.error("Error in searchQuery handler:", error);
+    res.status(500).json({
+      status: "error",
+      message: "An error occurred while processing the search query.",
+      error: error.message,
+    });
+  }
 });
