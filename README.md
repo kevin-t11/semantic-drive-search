@@ -78,7 +78,7 @@ npm run dev
 ## Project Structure
 
 ```
-google-drive-semantic-search/
+semantic-drive-search/
 ├── client/ # React frontend
 ├── server/ # Node.js backend
 ├── .env # Environment variables
