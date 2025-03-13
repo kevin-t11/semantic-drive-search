@@ -14,13 +14,11 @@ export default function GoogleCallbackPage({ onAuthSuccess }: GoogleCallbackPage
       const token = params.get("token");
 
       if (token) {
-        // Store token in localStorage
         localStorage.setItem("google_access_token", token);
 
         // Call onAuthSuccess to update state
         onAuthSuccess();
 
-        // Redirect to the home page or another protected route
         navigate("/ingest");
       } else {
         console.error("Failed to get token from callback");

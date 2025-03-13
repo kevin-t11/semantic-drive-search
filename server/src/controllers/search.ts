@@ -55,7 +55,6 @@ export const searchQuery = asyncHandler(async (req: Request, res: Response) => {
   }
 
   try {
-    // Generate embedding for the query using the free model
     const queryEmbedding = await generateEmbedding(query);
 
     // Search for similar vectors in Pinecone

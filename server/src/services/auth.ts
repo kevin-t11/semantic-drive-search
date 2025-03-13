@@ -4,14 +4,12 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// Initialize OAuth client with credentials and redirect URI
 const client = new OAuth2Client(
   process.env.CLIENT_ID,
   process.env.CLIENT_SECRET,
   process.env.REDIRECT_URI
 );
 
-// In-memory token storage (replace with a database in production)
 const tokenStore = new Map<string, TokenInfo>();
 
 /**
@@ -71,7 +69,6 @@ export const verifyAndRefreshToken = async (
       throw new Error("Refresh token not available");
     }
 
-    // Set the refresh token and refresh the access token
     client.setCredentials({
       refresh_token: storedTokens.refresh_token,
     });

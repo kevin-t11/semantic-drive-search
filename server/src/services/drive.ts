@@ -8,7 +8,6 @@ import { TokenInfo } from "../types/auth";
 export const getTextFilesFromDrive = async (
   tokens: TokenInfo
 ): Promise<DriveFile[]> => {
-  // create an authenticated client using tokens.
   const auth = createAuthenticatedClient(tokens);
   const drive = google.drive({ version: "v3", auth });
 
@@ -48,7 +47,6 @@ export const getFileContentFromDrive = async (
     alt: "media",
   });
 
-  // Drive API returns file content directly
   return response.data as string;
 };
 

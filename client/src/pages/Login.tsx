@@ -18,17 +18,12 @@ export default function LoginPage({ onAuthSuccess }: LoginPageProps) {
     setIsLoading(true)
 
     try {
-      // Google OAuth client ID from environment variables
       const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
 
-
-      // Define the OAuth scope for Drive access (read-only)
       const scope = "https://www.googleapis.com/auth/drive.readonly"
 
-      // Redirect URI from environment variables (must exactly match one of the authorized URIs in Google Cloud Console)
       const redirectUri = import.meta.env.VITE_REDIRECT_URL
 
-      // Generate a random state value for security
       const state = Math.random().toString(36).substring(2)
       localStorage.setItem("oauth_state", state)
 
@@ -42,7 +37,6 @@ export default function LoginPage({ onAuthSuccess }: LoginPageProps) {
       authUrl.searchParams.append("prompt", "consent")
       authUrl.searchParams.append("access_type", "offline")
 
-      // Redirect to Google's OAuth page
       window.location.href = authUrl.toString()
     } catch (error) {
       console.error("Authentication error:", error)
@@ -63,15 +57,11 @@ export default function LoginPage({ onAuthSuccess }: LoginPageProps) {
     const storedState = localStorage.getItem("oauth_state")
 
     if (code && state === storedState) {
-      // Remove state after verification
       localStorage.removeItem("oauth_state")
-      // Pass the authorization code to the parent component
-      // (Your backend should exchange this code for tokens)
       onAuthSuccess(code);
     }
   }
 
-  // Check for OAuth callback on component mount
   useEffect(() => {
     handleCallback()
   }, [])

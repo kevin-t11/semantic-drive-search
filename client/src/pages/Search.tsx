@@ -74,7 +74,6 @@ export default function SearchPage({ onLogout }: SearchPageProps) {
       }
 
       const data = await response.json()
-      // Use data.data.results because backend returns { status, data: { results } }
       const formattedResults =
         data.data.results?.map((match: Match, index: number) => ({
           id: `${match.id}-${index}`,

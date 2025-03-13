@@ -84,7 +84,6 @@ export default function IngestPage({ onLogout }: IngestPageProps) {
         const file = files[i]
         setProcessingStatus(`Processing file ${i + 1}/${files.length}: ${file.name}`)
 
-        // Fetch file content
         const contentResponse = await fetch(`https://www.googleapis.com/drive/v3/files/${file.id}?alt=media`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -97,7 +96,6 @@ export default function IngestPage({ onLogout }: IngestPageProps) {
 
         const content = await contentResponse.text()
 
-        // Send to backend for processing
         const ingestResponse = await fetch(`${BACKEDND_URI}/ingest`, {
           method: "POST",
           headers: {
@@ -124,7 +122,6 @@ export default function IngestPage({ onLogout }: IngestPageProps) {
         description: `Successfully processed ${files.length} files`,
       })
 
-      // Navigate to search page after successful processing
       setTimeout(() => {
         navigate("/search")
       }, 2000)

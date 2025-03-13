@@ -7,7 +7,6 @@ import { asyncHandler } from "../utils/asyncHandler";
 
 export const getTextFiles = asyncHandler(
   async (req: Request, res: Response) => {
-    // The req.tokens! syntax asserts that the tokens are present (set by the authentication middleware).
     const files = await getTextFilesFromDrive(req.tokens!);
 
     res.json({

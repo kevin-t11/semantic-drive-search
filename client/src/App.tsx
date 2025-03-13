@@ -70,7 +70,6 @@ export default function App() {
               )
             }
           />
-          {/* ✅ Handle Google OAuth callback */}
           <Route
             path="/google/callback"
             element={<GoogleCallbackPage onAuthSuccess={handleAuthSuccess} />}

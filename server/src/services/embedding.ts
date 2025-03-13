@@ -13,7 +13,6 @@ export const generateEmbedding = async (text: string): Promise<number[]> => {
   try {
     const truncatedText = text.slice(0, 8000);
 
-    // Use the correct embedding model
     const model = genAI.getGenerativeModel({ model: "embedding-001" });
     const result = await model.embedContent(truncatedText);
 
@@ -25,7 +24,7 @@ export const generateEmbedding = async (text: string): Promise<number[]> => {
       throw new Error("Failed to generate embedding - invalid result");
     }
 
-    // Extract embedding values correctly
+    // Extract embedding values
     return [...result.embedding.values];
   } catch (error) {
     console.error("Error generating embedding with Gemini:", error);

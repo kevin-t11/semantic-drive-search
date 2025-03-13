@@ -2,12 +2,10 @@ import { Pinecone, RecordMetadata } from "@pinecone-database/pinecone";
 import { FileVector } from "../types/file";
 import { SearchResult } from "../types/search";
 
-// Initialize Pinecone client
 const pinecone = new Pinecone({
   apiKey: process.env.PINECONE_API_KEY!,
 });
 
-// Get the index
 const index = pinecone.index(process.env.PINECONE_INDEX!);
 
 interface FileMetadata extends RecordMetadata {
@@ -23,7 +21,6 @@ interface FileMetadata extends RecordMetadata {
 export const storeFileVectors = async (
   fileVectors: FileVector[]
 ): Promise<void> => {
-  // Prepare vectors for batch upsert
   const vectors = fileVectors.map((fileVector) => ({
     id: fileVector.id,
     values: fileVector.embedding,
@@ -31,11 +28,11 @@ export const storeFileVectors = async (
       fileName: fileVector.fileName,
       fileId: fileVector.fileId,
       webViewLink: fileVector.webViewLink,
-      content: fileVector.content.slice(0, 1000), // Store a preview of content
+      content: fileVector.content.slice(0, 1000),
     } as FileMetadata,
   }));
 
-  // Split into smaller batches if needed (Pinecone has upsert limits)
+  // Spliting into smaller batches if needed (Pinecone has upsert limits)
   const batchSize = 100;
   for (let i = 0; i < vectors.length; i += batchSize) {
     const batch = vectors.slice(i, i + batchSize);
@@ -48,7 +45,7 @@ export const storeFileVectors = async (
  * Search files in Pinecone by query embedding
  */
 export const searchVectors = async (
-  queryEmbedding: number[], // Ensure this is explicitly typed
+  queryEmbedding: number[],
   limit: number = 5
 ): Promise<SearchResult[]> => {
   const results = await index.query({
