@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@google/generative-ai": "^0.24.0",
     "@pinecone-database/pinecone": "^5.1.1",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",

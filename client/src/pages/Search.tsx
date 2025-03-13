@@ -1,11 +1,15 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
+import React, { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { Search, ExternalLink, FileText, Loader2 } from "lucide-react"
 import { NavBar } from "@/components/Navbar"
@@ -21,7 +25,16 @@ interface SearchResult {
   score: number
 }
 
-const BACKEDND_URI = import.meta.env.VITE_BACKEND_URI;
+interface Match {
+  id: string
+  metadata?: {
+    fileName: string
+    webViewLink: string
+  }
+  score: number
+}
+
+const BACKEDND_URI = import.meta.env.VITE_BACKEND_URI
 
 export default function SearchPage({ onLogout }: SearchPageProps) {
   const [query, setQuery] = useState("")
@@ -50,21 +63,29 @@ export default function SearchPage({ onLogout }: SearchPageProps) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ query }),
       })
 
-      console.log(response);
 
       if (!response.ok) {
         throw new Error("Search failed")
       }
 
       const data = await response.json()
-      setResults(data.results || [])
+      // Use data.data.results because backend returns { status, data: { results } }
+      const formattedResults =
+        data.data.results?.map((match: Match, index: number) => ({
+          id: `${match.id}-${index}`,
+          title: match.metadata?.fileName,
+          driveLink: match.metadata?.webViewLink,
+          score: match.score,
+        })) || []
 
-      if (data.results.length === 0) {
+      setResults(formattedResults)
+
+      if (formattedResults.length === 0) {
         toast({
           title: "No results found",
           description: "Try a different search query",
@@ -75,7 +96,10 @@ export default function SearchPage({ onLogout }: SearchPageProps) {
       toast({
         variant: "default",
         title: "Search failed",
-        description: error instanceof Error ? error.message : "An unknown error occurred",
+        description:
+          error instanceof Error
+            ? error.message
+            : "An unknown error occurred",
       })
     } finally {
       setIsSearching(false)
@@ -91,10 +115,15 @@ export default function SearchPage({ onLogout }: SearchPageProps) {
           <Card className="shadow-lg mb-6">
             <CardHeader>
               <CardTitle className="text-2xl">Search Your Drive Files</CardTitle>
-              <CardDescription>Search through your processed Google Drive files using AI</CardDescription>
+              <CardDescription>
+                Search through your processed Google Drive files using AI
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSearch} className="flex w-full items-center space-x-2">
+              <form
+                onSubmit={handleSearch}
+                className="flex w-full items-center space-x-2"
+              >
                 <Input
                   type="text"
                   placeholder="Enter your search query..."
@@ -123,12 +152,17 @@ export default function SearchPage({ onLogout }: SearchPageProps) {
             <Card>
               <CardHeader>
                 <CardTitle className="text-xl">Search Results</CardTitle>
-                <CardDescription>Found {results.length} matching documents</CardDescription>
+                <CardDescription>
+                  Found {results.length} matching documents
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {results.map((result) => (
-                    <div key={result.id} className="p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                  {results.map((result, index) => (
+                    <div
+                      key={`${result.id}-${index}`}
+                      className="p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                    >
                       <div className="flex items-start justify-between">
                         <div className="flex items-start space-x-3">
                           <FileText className="h-5 w-5 text-primary mt-0.5" />
@@ -160,4 +194,3 @@ export default function SearchPage({ onLogout }: SearchPageProps) {
     </div>
   )
 }
-

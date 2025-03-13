@@ -10,7 +10,6 @@ const pinecone = new Pinecone({
 // Get the index
 const index = pinecone.index(process.env.PINECONE_INDEX!);
 
-// Define custom metadata type for better type safety
 interface FileMetadata extends RecordMetadata {
   fileName: string;
   fileId: string;
@@ -49,20 +48,19 @@ export const storeFileVectors = async (
  * Search files in Pinecone by query embedding
  */
 export const searchVectors = async (
-  queryEmbedding: number[],
+  queryEmbedding: number[], // Ensure this is explicitly typed
   limit: number = 5
 ): Promise<SearchResult[]> => {
   const results = await index.query({
-    vector: queryEmbedding,
+    vector: queryEmbedding as number[],
     topK: limit,
     includeMetadata: true,
   });
 
   return results.matches
-    .filter((match) => match.metadata) // Filter out undefined metadata
+    .filter((match) => match.metadata !== undefined)
     .map((match) => {
-      // Use type assertion to handle Pinecone's metadata type
-      const metadata = match.metadata as FileMetadata;
+      const metadata = match.metadata as unknown as FileMetadata;
 
       return {
         fileName: metadata.fileName,

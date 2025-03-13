@@ -112,6 +112,7 @@ export default function IngestPage({ onLogout }: IngestPageProps) {
           }),
         })
 
+
         if (!ingestResponse.ok) {
           throw new Error(`Failed to process file: ${file.name}`)
         }

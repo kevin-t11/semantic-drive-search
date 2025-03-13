@@ -66,7 +66,7 @@ export const fetchMultipleFileContents = async (
         return { ...file, content };
       } catch (error) {
         console.error(`Error fetching content for file ${file.name}:`, error);
-        return { ...file, content: "" };
+        throw new Error(`Failed to fetch content for file: ${file.name}`);
       }
     })
   );
