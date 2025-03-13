@@ -43,7 +43,7 @@ A full-stack application that enables semantic search across Google Drive files 
 1. Clone the repository
 
 ```
-git clone https://github.com/yourusername/semantic-drive-search.git
+git clone https://github.com/kevin-t11/semantic-drive-search.git
 cd semantic-drive-search
 ```
 
